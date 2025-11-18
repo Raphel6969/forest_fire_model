@@ -1,0 +1,8 @@
+body { font-family: Arial, sans-serif; background: linear-gradient(180deg, #0f172a, #071033); color: #fff; height: 100vh; margin:0; display:flex; align-items:center; justify-content:center; }
+.container { background: rgba(255,255,255,0.04); padding: 28px; border-radius: 12px; width: 420px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+h1 { margin: 0 0 10px 0; font-size: 22px; }
+p { color: #cbd5e1; margin-top:0; margin-bottom:16px; }
+input[type=file] { display:block; margin-bottom:12px; }
+button { background: linear-gradient(90deg,#ff7a18,#ff3d00); border:none; padding:10px 14px; border-radius:8px; color:#fff; cursor:pointer; }
+.result { margin-top:14px; font-weight:600; }
+.preview img { max-width:100%; margin-top:12px; border-radius:8px; }

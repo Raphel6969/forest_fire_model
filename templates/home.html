@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forest Fire Detection - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="home-container">
+        <!-- Fire Animation Background -->
+        <div class="fire-background">
+            <div class="flame"></div>
+            <div class="flame"></div>
+            <div class="flame"></div>
+            <div class="flame"></div>
+            <div class="flame"></div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="home-content">
+            <h1 class="home-title">Forest Fire Detection</h1>
+            <p class="home-subtitle">AI-Powered Early Warning System</p>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>🔥 Real-Time Detection</h3>
+                    <p>Our deep learning model analyzes images in seconds to detect potential forest fires with high accuracy.</p>
+                </div>
+                <div class="info-card">
+                    <h3>🌲 Save Ecosystems</h3>
+                    <p>Early detection can save thousands of acres of forest and countless wildlife habitats from destruction.</p>
+                </div>
+                <div class="info-card">
+                    <h3>🚀 Advanced AI</h3>
+                    <p>Powered by TensorFlow and trained on thousands of forest images to ensure reliable predictions.</p>
+                </div>
+            </div>
+
+            <a href="/detect" class="cta-button">Get Started →</a>
+        </div>
+    </div>
+</body>
+</html>

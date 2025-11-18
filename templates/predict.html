@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forest Fire Detection - Analyze</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="predict-container">
+        <div class="predict-content">
+            <h1 class="predict-title">Analyze Image</h1>
+            <!-- Upload Area -->
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📁</div>
+                <p class="upload-text">Click to upload or drag and drop an image</p>
+                <input type="file" id="fileInput" accept="image/*">
+            </div>
+            <!-- Image Preview -->
+            <img id="imagePreview" alt="Preview">
+            <!-- Analyze Button -->
+            <button class="analyze-button" id="analyzeBtn" disabled>Analyze Image</button>
+            <!-- Loading Spinner -->
+            <div class="spinner" id="spinner"></div>
+            <!-- Result Display -->
+            <div id="result">
+                <div class="result-label" id="resultLabel"></div>
+            </div>
+            <!-- Back Button -->
+            <a href="/" class="back-button">← Back to Home</a>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>
