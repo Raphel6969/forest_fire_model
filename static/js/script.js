@@ -55,7 +55,12 @@ function handleFile(file) {
 
 // Analyze button handler
 analyzeBtn.addEventListener('click', async () => {
-    if (!selectedFile) return;
+    console.log('Analyze button clicked');
+    if (!selectedFile) {
+        console.log('No file selected');
+        return;
+    }
+    console.log('File selected:', selectedFile.name);
 
     // Hide previous result
     result.classList.remove('show', 'result-fire', 'result-no-fire');
@@ -86,6 +91,28 @@ analyzeBtn.addEventListener('click', async () => {
             } else {
                 result.classList.add('result-no-fire');
             }
+
+            // Check if button already exists to avoid duplicates
+            let analysisBtn = document.getElementById('viewAnalysisBtn');
+            if (!analysisBtn) {
+                analysisBtn = document.createElement('a');
+                analysisBtn.id = 'viewAnalysisBtn';
+                analysisBtn.className = 'analyze-button';
+                analysisBtn.style.marginTop = '1rem';
+                analysisBtn.style.display = 'inline-block';
+                analysisBtn.style.textDecoration = 'none';
+                analysisBtn.style.background = 'linear-gradient(135deg, #4a90e2, #007bff)'; // Different color to distinguish
+                analysisBtn.textContent = 'View Detailed Analysis 📊';
+                result.appendChild(analysisBtn);
+            }
+
+            // Update href with the image filename
+            // We need the filename from the response. 
+            // The response returns 'image': 'static/uploads/filename.jpg'
+            // We need just the filename.
+            const filename = data.image.split('/').pop().split('\\').pop();
+            analysisBtn.href = `/analysis/${filename}`;
+
             result.classList.add('show');
         } else {
             alert('Error: ' + data.error);

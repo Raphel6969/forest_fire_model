@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forest Fire Detection - Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .chart-container {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 69, 0, 0.1);
+        }
+
+        .confusion-matrix-img {
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 69, 0, 0.2);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--fire-orange);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .analyzed-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border: 2px solid var(--fire-orange);
+        }
+
+        @media (min-width: 768px) {
+            .analysis-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .full-width {
+                grid-column: 1 / -1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="predict-container">
+        <div class="predict-content" style="max-width: 900px;">
+            <h1 class="predict-title">Detailed Analysis</h1>
+
+            <div class="analysis-grid">
+                <!-- Image and Result -->
+                <div class="chart-container">
+                    <h2 class="section-title">Input Image</h2>
+                    <img src="{{ url_for('uploaded_file', filename=filename) }}" alt="Analyzed Image"
+                        class="analyzed-image">
+                    <div class="result-label"
+                        style="text-align: center; color: {{ '#ff4500' if 'Fire' in label else '#00ff7f' }}">
+                        {{ label }}
+                    </div>
+                </div>
+
+                <!-- Probability Chart -->
+                <div class="chart-container">
+                    <h2 class="section-title">Confidence Scores</h2>
+                    <canvas id="probChart"></canvas>
+                </div>
+
+                <!-- Confusion Matrix -->
+                <div class="chart-container full-width">
+                    <h2 class="section-title">Model Confusion Matrix</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 1rem;">Performance on validation dataset</p>
+                    <img src="{{ url_for('static', filename='confusion_matrix.png') }}" alt="Confusion Matrix"
+                        class="confusion-matrix-img">
+                </div>
+            </div>
+
+            <!-- Back Button -->
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="/detect" class="analyze-button"
+                    style="text-decoration: none; display: inline-block; width: auto; padding: 1rem 3rem;">Analyze
+                    Another</a>
+                <br>
+                <a href="/" class="back-button">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Chart.js Setup
+        const ctx = document.getElementById('probChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Fire', 'No Fire'],
+                datasets: [{
+                    label: 'Probability (%)',
+                    data: [{{ fire_prob }}, {{ no_fire_prob }}],
+            backgroundColor: [
+                'rgba(255, 69, 0, 0.7)',  // Fire Red/Orange
+                'rgba(0, 255, 127, 0.7)'  // No Fire Green
+            ],
+            borderColor: [
+                'rgba(255, 69, 0, 1)',
+                'rgba(0, 255, 127, 1)'
+            ],
+            borderWidth: 1
+        }]
+            },
+            options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    ticks: {
+                        color: '#a0a0a0'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: '#f5f5f5',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+        });
+    </script>
+</body>
+
+</html>
