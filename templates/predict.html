@@ -35,7 +35,7 @@
             <a href="/" class="back-button">← Back to Home</a>
         </div>
     </div>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}?v={{ range(1, 10000) | random }}"></script>
 </body>
 
 </html>

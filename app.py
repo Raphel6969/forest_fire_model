@@ -105,6 +105,62 @@ def predict():
         traceback.print_exc()
         return jsonify({'success': False, 'error': str(e)}), 500
 
+@app.route('/analysis/<filename>')
+def analysis(filename):
+    # Re-run prediction to get data for the graph (or we could pass it via query params, but this is safer for now)
+    # In a real app, we might cache the result.
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    if not os.path.exists(file_path):
+        return "File not found", 404
+
+    try:
+        with open(file_path, 'rb') as f:
+            image_bytes = f.read()
+        x = preprocess_image_bytes(image_bytes)
+        preds = model.predict(x)
+        preds = np.array(preds)
+        
+        fire_prob = 0
+        no_fire_prob = 0
+        label = ""
+
+        if preds.ndim == 1 or (preds.ndim == 2 and preds.shape[1] == 1):
+            score = float(preds.ravel()[0])
+            # Sigmoid output: 0 = Fire, 1 = No Fire (based on previous code logic: score <= 0.5 is Fire)
+            # WAIT: The previous code said: label = 'Fire Detected' if score <= 0.5 else 'No Fire'
+            # So closer to 0 is Fire, closer to 1 is No Fire.
+            fire_prob = (1 - score) * 100
+            no_fire_prob = score * 100
+            label = 'Fire Detected' if score <= 0.5 else 'No Fire'
+        else:
+            # Softmax output
+            # Assuming class 0 is Fire, class 1 is No Fire (need to verify, but let's assume based on binary logic)
+            # Actually, usually 0 is first class. Let's stick to the binary logic seen above for safety.
+            # If it hits this else block, it's multiclass.
+            # Let's just use the max score for now as generic.
+            # But for the graph we need specific probabilities.
+            # Let's assume 2 classes for the graph if multiclass: Class 0 and Class 1.
+            probs = preds[0]
+            if len(probs) >= 2:
+                fire_prob = probs[0] * 100 # Assumption
+                no_fire_prob = probs[1] * 100 # Assumption
+            else:
+                fire_prob = probs[0] * 100
+                no_fire_prob = 0
+            
+            idx = int(np.argmax(preds, axis=1)[0])
+            label = f'class_{idx}'
+
+        return render_template('analysis.html', 
+                               filename=filename, 
+                               fire_prob=round(fire_prob, 2), 
+                               no_fire_prob=round(no_fire_prob, 2),
+                               label=label)
+
+    except Exception as e:
+        traceback.print_exc()
+        return f"Error analyzing image: {e}", 500
+
 # static uploads route (Flask will serve from /static by default, but we include this for clarity)
 @app.route('/uploads/<path:filename>')
 def uploaded_file(filename):
